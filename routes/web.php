@@ -19,3 +19,7 @@ Route::get('/restore/{id}', [RecycleProductsController::class, 'restore'])->name
 Route::post('/restore/delete/{id}', [RecycleProductsController::class, 'destroy'])->name('project.recycle.delete');
 
 Route::post('/project/recycle/restoreAll', [RecycleProductsController::class, 'restoreAll'])->name('project.recycle.restoreAll');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
