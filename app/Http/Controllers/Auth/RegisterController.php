@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Stevebauman\Location\Facades\Location;
 
 class RegisterController extends Controller
@@ -77,21 +78,44 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        // dd($request->ip());
-        $position = Location::get('103.7.250.166');
-        dd($position->regionName);
-        $this->validator($request->all())->validate();
 
-        event(new Registered($user = $this->create($request->all())));
+        $ip = '103.7.250.166'; // Client IP
+        $apiToken = '8c08efb1bf165e'; // Replace with your actual API token
 
-        $this->guard()->login($user);
+        $response = Http::get("https://ipinfo.io/{$ip}?token={$apiToken}");
 
-        if ($response = $this->registered($request, $user)) {
-            return $response;
+        if ($response->successful()) {
+            $locationData = $response->json();
+            dd($locationData);
+            return response()->json([
+                'ip' => $locationData['ip'],
+                'country' => $locationData['country'],
+                'region' => $locationData['region'],
+                'city' => $locationData['city'],
+                'latitude' => explode(',', $locationData['loc'])[0],
+                'longitude' => explode(',', $locationData['loc'])[1],
+            ]);
         }
 
-        return $request->wantsJson()
-                    ? new JsonResponse([], 201)
-                    : redirect($this->redirectPath());
+        return response()->json(['message' => 'Location not found.'], 404);
+
+
+
+        // dd($request->ip());
+        // $position = Location::get('103.7.250.166');
+        // dd($position);
+        // $this->validator($request->all())->validate();
+
+        // event(new Registered($user = $this->create($request->all())));
+
+        // $this->guard()->login($user);
+
+        // if ($response = $this->registered($request, $user)) {
+        //     return $response;
+        // }
+
+        // return $request->wantsJson()
+        //             ? new JsonResponse([], 201)
+        //             : redirect($this->redirectPath());
     }
 }

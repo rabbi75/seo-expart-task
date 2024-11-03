@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendProjectCreateJob;
 use App\Mail\ProjectCreated;
 use App\Models\Project;
 use App\Models\Staff;
@@ -75,7 +76,7 @@ class ProjectController extends Controller
         ]);
 
         // Send email to admin after project creation
-        Mail::to(config('mail.admin_email'))->send(new ProjectCreated($project));
+        dispatch(new SendProjectCreateJob($project));
 
         return redirect()->route('projects.index')->with('success', 'Project created successfully.');
     }
