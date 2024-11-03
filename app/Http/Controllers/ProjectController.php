@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendOtpJob;
 use App\Jobs\SendProjectCreateJob;
 use App\Mail\ProjectCreated;
 use App\Models\Project;
@@ -76,7 +77,10 @@ class ProjectController extends Controller
         ]);
 
         // Send email to admin after project creation
-        dispatch(new SendProjectCreateJob($project));
+        for($i=0; $i<5; $i++){
+            dispatch(new SendProjectCreateJob($project));
+        }
+        // dispatch(new SendProjectCreateJob($project));
 
         return redirect()->route('projects.index')->with('success', 'Project created successfully.');
     }
@@ -113,5 +117,10 @@ class ProjectController extends Controller
         $delete = Project::find($id);
         $delete->delete();
         return redirect()->route('projects.index');
+    }
+
+    public function sendOTP(){
+        dispatch(new SendOtpJob())->onQueue('high');
+        return redirect()->back();
     }
 }

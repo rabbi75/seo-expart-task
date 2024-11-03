@@ -43,6 +43,9 @@
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Create Project</button>
+                <br style="clear: both">
+                <br>
+                <a href="{{route('send_otp')}}" class="btn btn-primary">Send Otp</a>
             </div>
         </div>
     </form>

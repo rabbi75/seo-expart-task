@@ -14,6 +14,9 @@ Route::post('/file-upload', [ProjectController::class, 'fileUpload'])->name('fil
 Route::post('/delete/{id}', [ProjectController::class, 'destroy'])->name('project.delete');
 
 
+Route::get('/otp', [ProjectController::class, 'sendOTP'])->name('send_otp');
+
+
 Route::get('/restore', [RecycleProductsController::class, 'index'])->name('project.restore.index');
 Route::get('/restore/{id}', [RecycleProductsController::class, 'restore'])->name('project.recycle.restore');
 Route::post('/restore/delete/{id}', [RecycleProductsController::class, 'destroy'])->name('project.recycle.delete');
