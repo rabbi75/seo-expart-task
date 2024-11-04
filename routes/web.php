@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MoneySentController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RecycleProductsController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,9 @@ Route::get('/restore/{id}', [RecycleProductsController::class, 'restore'])->name
 Route::post('/restore/delete/{id}', [RecycleProductsController::class, 'destroy'])->name('project.recycle.delete');
 
 Route::post('/project/recycle/restoreAll', [RecycleProductsController::class, 'restoreAll'])->name('project.recycle.restoreAll');
+
+Route::get('/money', [MoneySentController::class, 'create'])->name('money.sent.create');
+Route::post('/money-store', [MoneySentController::class, 'store'])->name('money.sent.store');
 
 Auth::routes();
 
